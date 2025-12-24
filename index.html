@@ -131,7 +131,7 @@
   }
 
   // Функция для добавления сообщений
-  function addMessage(messageText) {
+  function addMessage(messageText, isBot = false) {
     const message = document.createElement('div');
     message.classList.add('message');
     
@@ -143,6 +143,9 @@
     
     // Добавляем сообщение и время
     message.innerHTML = `${messageText} <span class="time">${timeString}</span>`;
+    if (isBot) {
+      message.style.backgroundColor = "#D3D3D3"; // Цвет фона для сообщений бота
+    }
     document.getElementById('chat').appendChild(message);
     
     // Прокрутка чата вниз после добавления нового сообщения
@@ -150,13 +153,22 @@
     chat.scrollTop = chat.scrollHeight;
   }
 
+  // Эмуляция ответа бота
+  function simulateBotResponse() {
+    setTimeout(function() {
+      const botResponse = "Привет! Я бот. Как ты?";
+      addMessage(botResponse, true); // Отображаем ответ от бота
+    }, 1500); // Бот отвечает через 1.5 секунды
+  }
+
   // Обработчик отправки сообщения
   document.getElementById('sendBtn').addEventListener('click', function() {
     const messageInput = document.getElementById('messageInput');
     const messageText = messageInput.value.trim();
     if (messageText) {
-      addMessage(messageText);
+      addMessage(messageText);  // Добавляем сообщение от пользователя
       messageInput.value = ''; // Очищаем поле ввода
+      simulateBotResponse();   // Вызываем ответ бота
     }
   });
 
