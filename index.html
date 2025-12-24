@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Private Chat</title>
+  <style>
+    /* --- Общие стили --- */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* --- Контейнер --- */
+    #container {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      padding: 30px;
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff7e5f;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #feb47b;
+    }
+
+    /* --- Чат --- */
+    #chat {
+      border: 1px solid #ccc;
+      height: 350px; /* Сделал чат больше */
+      overflow-y: auto;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+      text-align: left;
+      display: flex;
+      flex-direction: column; /* Сообщения идут снизу вверх */
+    }
+
+    .message {
+      background: #ffecd2;
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin: 5px 0;
+      display: inline-block;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .time {
+      font-size: 12px;
+      color: gray;
+      margin-left: 10px;
+      font-style: italic;
+    }
+
+    #error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="container">
+
+  <!-- 🔐 Экран с кодом -->
+  <div id="login">
+    <h2>Введите код доступа</h2>
+    <input id="codeInput" placeholder="Код">
+    <button onclick="checkCode()">Войти</button>
+    <p id="error"></p>
+  </div>
+
+  <!-- 💬 Чат -->
+  <div id="chatSection" style="display:none;">
+    <h2>rooms</h2>
+    <div id="chat"></div> <!-- Здесь будут отображаться сообщения -->
+    <input id="messageInput" placeholder="Введите сообщение">
+    <button id="sendBtn">Отправить</button>
+  </div>
+
+</div>
+
+<script>
+  // Простой код для эмуляции чата
+  let isLoggedIn = false;
+  const code = "V333K"; // Пример кода доступа
+
+  // Функция для проверки кода доступа
+  function checkCode() {
+    const inputCode = document.getElementById('codeInput').value;
+    if (inputCode === code) {
+      isLoggedIn = true;
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('chatSection').style.display = 'block';
+    } else {
+      document.getElementById('error').textContent = "Неверный код!";
+    }
+  }
+
+  // Функция для добавления сообщений
+  function addMessage(messageText) {
+    const message = document.createElement('div');
+    message.classList.add('message');
+    
+    // Получаем текущее время
+    const currentTime = new Date();
+    const hours = currentTime.getHours().toString().padStart(2, '0');
+    const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}`;
+    
+    // Добавляем сообщение и время
+    message.innerHTML = `${messageText} <span class="time">${timeString}</span>`;
+    document.getElementById('chat').appendChild(message);
+    
+    // Прокрутка чата вниз после добавления нового сообщения
+    const chat = document.getElementById('chat');
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  // Обработчик отправки сообщения
+  document.getElementById('sendBtn').addEventListener('click', function() {
+    const messageInput = document.getElementById('messageInput');
+    const messageText = messageInput.value.trim();
+    if (messageText) {
+      addMessage(messageText);
+      messageInput.value = ''; // Очищаем поле ввода
+    }
+  });
+
+  // Обработчик нажатия Enter
+  document.getElementById('messageInput').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      document.getElementById('sendBtn').click();
+    }
+  });
+</script>
+
+</body>
+</html>
